@@ -3,6 +3,7 @@
 namespace Stevebauman\Inventory\Models;
 
 use Stevebauman\Inventory\Traits\InventoryTrait;
+use Stevebauman\Inventory\Traits\AssemblyTrait;
 
 /**
  * Class Inventory
@@ -11,6 +12,8 @@ use Stevebauman\Inventory\Traits\InventoryTrait;
 class Inventory extends BaseModel
 {
     use InventoryTrait;
+    
+    use AssemblyTrait;
 
     protected $table = 'inventories';
 

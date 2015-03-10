@@ -98,6 +98,7 @@ abstract class FunctionalTestCase extends PHPUnit_Framework_TestCase
             $table->integer('metric_id')->unsigned();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->boolean('assembly')->default(false); 
 
             $table->foreign('category_id')->references('id')->on('categories')
                 ->onUpdate('restrict')
@@ -182,5 +183,20 @@ abstract class FunctionalTestCase extends PHPUnit_Framework_TestCase
              */
             $table->unique(array('code'));
         });
+
+        DB::schema()->create('inventory_assemblies', function ($table) {
+            
+            $table->increments('id');
+
+            $table->integer('inventory_id', false, true);
+            $table->integer('part_id', false, true);
+            $table->integer('quantity')->nullable();
+            $table->integer('depth', false, true);
+            
+            $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete('cascade');
+            $table->foreign('part_id')->references('id')->on('inventories')->onDelete('cascade');
+
+        });
+
     }
 }

@@ -582,4 +582,56 @@ class InventoryTest extends FunctionalTestCase
         $this->assertEquals($item->getSku(), 'DRI-00001');
     }
 
+    public function testInventoryAssemblyCreation()
+    {
+        $this->testInventoryCreation();
+       
+        $metric = Metric::find(1);
+
+        $category = Category::find(1);
+        
+        $cmilk = Inventory::create(array(
+            'metric_id' => $metric->id,
+            'category_id' => $category->id,
+            'name' => 'Chocolate Milk',
+            'description' => 'Chocolate Milk',
+        ));
+
+        $cmilk->makeAssembly();
+
+        $this->assertTrue($cmilk->assembly);
+
+    }
+
+    public function testInventoryAddAssemblyItem()
+    {   
+        
+        $this->testInventoryAssemblyCreation();
+        
+        $metric = Metric::find(1);
+
+        $category = Category::find(1);
+        
+        $milk = Inventory::find(1);
+
+        $cmilk = Inventory::find(2);
+
+        $quik = Inventory::create(array(
+            'metric_id' => $metric->id,
+            'category_id' => $category->id,
+            'name' => 'Quik',
+            'description' => 'Cocoa Powder',
+        ));
+
+       
+        $cmilk->addAssemblyItem($milk);
+        
+        $cmilk->addAssemblyItem($quik, 2);
+
+        $item = $cmilk->getAssemblyItems()->first();
+
+        $this->assertEquals($item->name, 'Milk');
+
+    }
+
 }
